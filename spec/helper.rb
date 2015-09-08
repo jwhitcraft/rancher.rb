@@ -23,17 +23,6 @@ end
 require 'vcr'
 VCR.configure do |c|
   c.configure_rspec_metadata!
-=begin
-  c.before_http_request(:real?) do |request|
-    next if request.headers['X-Vcr-Test-Repo-Setup']
-    next unless request.uri.include? test_github_repository
-
-    options = {
-      :headers => {'X-Vcr-Test-Repo-Setup' => 'true'},
-      :auto_init => true
-    }
-  end
-=end
 
   c.ignore_request do |request|
     !!request.headers['X-Vcr-Test-Repo-Setup']

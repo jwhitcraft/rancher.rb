@@ -38,17 +38,17 @@ module Rancher
       inspected
     end
 
-    # Set OAuth app access_key
+    # Set Rancher access_key
     #
-    # @param value [String] 20 character GitHub OAuth app access_key
+    # @param value [String] Rancher access_key
     def access_key=(value)
       reset_agent
       @access_key = value
     end
 
-    # Set OAuth app secret_key
+    # Set Rancher secret_key
     #
-    # @param value [String] 40 character GitHub OAuth app secret_key
+    # @param value [String] Rancher secret_key
     def secret_key=(value)
       reset_agent
       @secret_key = value

@@ -3,30 +3,22 @@ module Rancher
   # in {Default}
   module Configurable
     # @!attribute api_endpoint
-    #   @return [String] Base URL for API requests. default: https://api.github.com/
-    # @!attribute auto_paginate
-    #   @return [Boolean] Auto fetch next page of results until rate limit reached
+    #   @return [String] Base URL for API requests. default: http://localhost:8080/v1/projects/1p1
     # @!attribute access_key
-    #   @see https://developer.github.com/v3/oauth/
-    #   @return [String] Configure OAuth app key
+    #   @return [String] Access Key from inside rancher
     # @!attribute [w] secret_key
-    #   @see https://developer.github.com/v3/oauth/
-    #   @return [String] Configure OAuth app secret
+    #   @return [String] Secrete Key form inside rancher
     # @!attribute connection_options
     #   @see https://github.com/lostisland/faraday
     #   @return [Hash] Configure connection options for Faraday
     # @!attribute middleware
     #   @see https://Rancher.com/lostisland/faraday
     #   @return [Faraday::Builder or Faraday::RackBuilder] Configure middleware for Faraday
-    # @!attribute per_page
-    #   @return [String] Configure page size for paginated results. API default: 30
     # @!attribute proxy
     #   @see https://Rancher.com/lostisland/faraday
     #   @return [String] URI for proxy server
     # @!attribute user_agent
     #   @return [String] Configure User-Agent header for requests.
-    # @!attribute web_endpoint
-    #   @return [String] Base URL for web URLs. default: https://rancher.com/
 
     attr_accessor :access_key, :secret_key, :connection_options,
                   :middleware, :proxy, :user_agent, :default_media_type

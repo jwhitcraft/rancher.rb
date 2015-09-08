@@ -8,9 +8,7 @@ module Rancher
   module Default
 
     # Default API endpoint
-    API_ENDPOINT = 'http://localhost:8080'.freeze
-
-    API_PATH = '/v1/1a5'.freeze
+    API_ENDPOINT = 'http://localhost:8080/v1/projects/1a5'.freeze
 
     # Default User Agent header string
     USER_AGENT   = "Rancher Ruby Gem #{Rancher::VERSION}".freeze
