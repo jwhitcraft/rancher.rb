@@ -22,7 +22,7 @@ module Rancher
 
     attr_accessor :access_key, :secret_key, :connection_options,
                   :middleware, :proxy, :user_agent, :default_media_type
-    attr_writer :api_endpoint, :api_path
+    attr_writer :api_endpoint
 
     class << self
 
@@ -31,7 +31,6 @@ module Rancher
       def keys
         @keys ||= [
           :api_endpoint,
-          :api_path,
           :access_key,
           :secret_key,
           :connection_options,

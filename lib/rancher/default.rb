@@ -40,12 +40,6 @@ module Rancher
         ENV['RANCHER_API_ENDPOINT'] || API_ENDPOINT
       end
 
-      # Default API path from ENV or {API_PATH}
-      # @return [String]
-      def api_path
-        ENV['RANCHER_API_PATH'] || API_PATH
-      end
-
       # Default pagination preference from ENV
       # @return [String]
       def auto_paginate

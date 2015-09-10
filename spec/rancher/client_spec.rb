@@ -123,7 +123,7 @@ describe Rancher::Client do
     it "fetches the API root" do
       Rancher.reset!
       VCR.use_cassette 'root' do
-        root = oauth_client.root
+        root = test_client.root
         expect(root.rels[:self].href).to eq(test_rancher_api_endpoint)
       end
     end
@@ -132,7 +132,7 @@ describe Rancher::Client do
   describe ".last_response", :vcr do
     it "caches the last agent response" do
       Rancher.reset!
-      client = oauth_client
+      client = test_client
       expect(client.last_response).to be_nil
       client.get "/"
       expect(client.last_response.status).to eq(200)
@@ -146,7 +146,7 @@ describe Rancher::Client do
     it "handles headers" do
       request = stub_get("/zen").
         with(:query => {:foo => "bar"}, :headers => {:accept => "text/plain"})
-      Rancher.get "/zen", :foo => "bar", :accept => "text/plain"
+      test_client.get "zen", :foo => "bar", :accept => "text/plain"
       assert_requested request
     end
   end # .get
@@ -156,7 +156,7 @@ describe Rancher::Client do
       Rancher.reset!
       request = stub_head("/zen").
         with(:query => {:foo => "bar"}, :headers => {:accept => "text/plain"})
-      Rancher.head "/zen", :foo => "bar", :accept => "text/plain"
+      Rancher.head "zen", :foo => "bar", :accept => "text/plain"
       assert_requested request
     end
   end # .head
@@ -164,16 +164,7 @@ describe Rancher::Client do
   describe "when making requests" do
     before do
       Rancher.reset!
-      @client = oauth_client
-    end
-    it "sets a custom user agent" do
-      user_agent = "Mozilla/5.0 I am Spartacus!"
-      root_request = stub_get("/").
-        with(:headers => {:user_agent => user_agent})
-      client = Rancher::Client.new(:user_agent => user_agent)
-      client.get "/"
-      assert_requested root_request
-      expect(client.last_response.status).to eq(200)
+      @client = test_client
     end
     it "sets a proxy server" do
       Rancher.configure do |config|
@@ -187,8 +178,8 @@ describe Rancher::Client do
       root_request = stub_post("/").
         with(:headers => headers).
         to_return(:status => 201)
-      client = Rancher::Client.new
-      client.post "/", :headers => headers
+      client = test_client
+      client.post "", :headers => headers
       assert_requested root_request
       expect(client.last_response.status).to eq(201)
     end

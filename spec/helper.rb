@@ -51,11 +51,9 @@ def test_rancher_secret_key
   ENV.fetch 'RANCHER_TEST_SECRET_KEY', 'x' * 40
 end
 
-def oauth_client
+def test_client
   Rancher::Client.new(
-    :api_endpoint => test_rancher_api_endpoint,
-    :access_key => test_rancher_access_key,
-    :secret_key => test_rancher_secret_key
+    :api_endpoint => test_rancher_api_endpoint
   )
 end
 
@@ -102,6 +100,9 @@ end
 
 def rancher_url(url)
   return url if url =~ /^http/
+  Rancher.configure do |c|
+    c.api_endpoint = test_rancher_api_endpoint
+  end
 
   url = File.join(Rancher.api_endpoint, url)
   uri = Addressable::URI.parse(url)
