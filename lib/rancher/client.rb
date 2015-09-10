@@ -5,6 +5,7 @@ require 'rancher/connection'
 require 'rancher/client/hosts'
 require 'rancher/client/load_balancer_services'
 require 'rancher/client/services'
+require 'rancher/client/service_consume_maps'
 
 module Rancher
   class Client
@@ -13,6 +14,7 @@ module Rancher
     include Rancher::Connection
     include Rancher::Client::Hosts
     include Rancher::Client::LoadBalancerServices
+    include Rancher::Client::ServiceConsumeMaps
     include Rancher::Client::Services
 
     # Header keys that can be passed in options hash to {#get},{#head}
