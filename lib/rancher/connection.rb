@@ -1,13 +1,13 @@
 require 'sawyer'
 require 'rancher/authentication'
-require 'rancher/link_parsers/rancher'
-
+require 'rancher/classify'
 module Rancher
 
   # Network layer for API clients.
   module Connection
 
     include Rancher::Authentication
+    include Rancher::Classify
 
     # Header keys that can be passed in options hash to {#get},{#head}
     CONVENIENCE_HEADERS = Set.new([:accept, :content_type])
@@ -150,7 +150,7 @@ module Rancher
       end
 
       @last_response = response = agent.call(method, URI::Parser.new.escape(path.to_s), data, options)
-      response.data
+      classify response.data
     end
 
     # Executes the request, checking if it was successful
@@ -165,9 +165,7 @@ module Rancher
 
 
     def sawyer_options
-      opts = {
-        :links_parser => Rancher::LinkParsers::Rancher.new
-      }
+      opts = {}
       conn_opts = @connection_options
       conn_opts[:builder] = @middleware if @middleware
       conn_opts[:proxy] = @proxy if @proxy

@@ -2,29 +2,38 @@ require 'rancher/configurable'
 require 'rancher/default'
 require 'rancher/authentication'
 require 'rancher/connection'
-require 'rancher/client/hosts'
-require 'rancher/client/load_balancer_services'
-require 'rancher/client/services'
-require 'rancher/client/service_consume_maps'
+require 'rancher/classify'
 
 module Rancher
   class Client
     include Rancher::Authentication
     include Rancher::Configurable
     include Rancher::Connection
-    include Rancher::Client::Hosts
-    include Rancher::Client::LoadBalancerServices
-    include Rancher::Client::ServiceConsumeMaps
-    include Rancher::Client::Services
+    include Rancher::Classify
+
+    @types
+
+    attr_reader :types
 
     # Header keys that can be passed in options hash to {#get},{#head}
     CONVENIENCE_HEADERS = Set.new([:accept, :content_type])
 
     def initialize(options = {})
       # Use options passed in, but fall back to module defaults
+      @types = {}
       Rancher::Configurable.keys.each do |key|
         instance_variable_set(:"@#{key}", options[key] || Rancher.instance_variable_get(:"@#{key}"))
       end
+
+      load_schema
+    end
+
+    def load_schema
+      response = get 'schema'
+
+      response.each { |res|
+        @types[res.get_id.to_sym] = Rancher::Type.new(res)
+      } if response.is_a?(Rancher::Collection)
     end
 
     # Text representation of the client, masking tokens and passwords
@@ -54,6 +63,18 @@ module Rancher
     def secret_key=(value)
       reset_agent
       @secret_key = value
+    end
+
+    def respond_to_missing?(method_name, include_private=false)
+      !!@types.has_key?(method_name)
+    end
+
+    def method_missing(method_name, *args, &block)
+      if respond_to?(method_name)
+        return @types[method_name]
+      end
+
+      super
     end
     
   end
