@@ -30,6 +30,16 @@ Rancher.configure do |c|
 end
 ```
 
+## Fetching Hosts
+
+```ruby
+# fetch all hosts
+Rancher.host.query
+
+# fetch a specific host
+Rancher.host.by_id('1h1')
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/jwhitcraft/rancher.rb/fork )
