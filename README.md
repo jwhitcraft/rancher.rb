@@ -18,10 +18,9 @@ Or install it yourself as:
 
     $ gem install rancher.rb
 
-## Usage
+## Configuration
 
-### Configuration
-
+You can globally configure Rancher-rb to alawys use the same project by using the `.configure` command.
 ```ruby
 Rancher.configure do |c|
   c.api_endpoint = 'http://localhost:8080/v1/projects/1a5/'
@@ -30,14 +29,31 @@ Rancher.configure do |c|
 end
 ```
 
-## Fetching Hosts
+Finding Resources
+--------
+Each resource type in the API is available as a member of the Client.
 
+### Listing all resources in a collection
 ```ruby
-# fetch all hosts
-Rancher.host.query
+hosts = Rancher.host.query();
+puts "There are #{hosts.length} hosts:\n";
+hosts.each { |host|
+  puts host.getName
+}
+```
+    
+### Filtering
+Filters allow you to search a collection for resources matching a set of conditions.
+```ruby
+http_balancers = Rancher.loadbalancers.query({
+  :publicStartPort => 80
+})
+```
 
-# fetch a specific host
-Rancher.host.by_id('1h1')
+### Getting a single Resource by ID
+If you know the ID of the resource you are looking for already, you can also get it directly.
+```ruby
+host = Rancher.host.by_id('your-host-id');
 ```
 
 ## Contributing
