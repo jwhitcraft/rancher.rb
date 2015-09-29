@@ -43,7 +43,7 @@ module Rancher
     def action(name, *args)
       if action?(name)
         opt = args[0] || {}
-        link = @actions[name]
+        link = @actions[name.to_sym]
         return Rancher.post link, opt
       end
     end
@@ -70,7 +70,7 @@ module Rancher
       elsif str_method_name.start_with?('do')
         name = str_method_name[3..-1]
         @meta[name.to_sym] = args[0]
-        action(name, args)
+        action(name, *args)
       elsif str_method_name.start_with?('can')
         name = str_method_name[4..-1]
         action?(name)
