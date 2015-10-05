@@ -71,20 +71,20 @@ module Rancher
         opts[:filters].each do |field, value|
           qs.push("#{field}=#{value}") unless value.is_a?(Array)
 
-          if value.is_a?(Array)
-            qs.concat value.map do |val|
-              if val.is_a?(Hash) && (val.has_key?(:modifier) || val.has_key?(:value))
-                name = "#{field}"
-                name += "_#{val[:modifier]}" if val.has_key?(:modifier) && val[:modifier] != '' && val[:modifier] != 'eq'
+          next unless value.is_a?(Array)
 
-                str = "#{name}="
+          qs.concat value.map do |val|
+            if val.is_a?(Hash) && (val.key?(:modifier) || val.key?(:value))
+              name = "#{field}"
+              name += "_#{val[:modifier]}" if val.key?(:modifier) && val[:modifier] != '' && val[:modifier] != 'eq'
 
-                str += "#{val[:value]}" if val.has_key?(:value)
+              str = "#{name}="
 
-                str
-              else
-                "#{field}=#{val}"
-              end
+              str += "#{val[:value]}" if val.key?(:value)
+
+              str
+            else
+              "#{field}=#{val}"
             end
           end
         end
