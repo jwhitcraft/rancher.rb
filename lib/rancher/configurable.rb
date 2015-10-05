@@ -53,7 +53,7 @@ module Rancher
       end
       self
     end
-    alias_method(setup, reset!)
+    alias_method :setup, :reset!
 
     # Compares client options to a Hash of requested options
     #
