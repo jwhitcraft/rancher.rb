@@ -56,6 +56,11 @@ If you know the ID of the resource you are looking for already, you can also get
 host = Rancher.host.by_id('your-host-id');
 ```
 
+## ToDo:
+
+- Write More Tests
+- Ability To Define Custom Classes for specific types
+
 ## Contributing
 
 1. Fork it ( https://github.com/jwhitcraft/rancher.rb/fork )
