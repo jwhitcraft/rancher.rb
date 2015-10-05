@@ -9,7 +9,7 @@ describe Rancher do
     Rancher.reset!
   end
 
-  it "sets defaults" do
+  it 'sets defaults' do
     Rancher::Configurable.keys.each do |key|
       expect(Rancher.instance_variable_get(:"@#{key}")).to eq(Rancher::Default.send(key))
     end

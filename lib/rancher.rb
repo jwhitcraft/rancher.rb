@@ -5,7 +5,6 @@ require 'rancher/default'
 module Rancher
   class << self
     include Rancher::Configurable
-    
     # API client based on configured options {Configurable}
     #
     # @return [Rancher::Client] API Wrapper
@@ -13,10 +12,10 @@ module Rancher
       return @client if defined?(@client) && @client.same_options?(options)
       @client = Rancher::Client.new(options)
     end
-    
+
     private
 
-    def respond_to_missing?(method_name, include_private=false)
+    def respond_to_missing?(method_name, include_private = false)
       client.respond_to?(method_name, include_private)
     end
 
@@ -24,11 +23,10 @@ module Rancher
       if client.respond_to?(method_name)
         return client.send(method_name, *args, &block)
       end
-      
+
       super
     end
   end
-  
 end
 
 Rancher.setup

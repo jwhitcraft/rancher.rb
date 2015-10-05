@@ -3,10 +3,8 @@ require 'rancher/response/raise_error'
 require 'rancher/version'
 
 module Rancher
-
   # Default configuration options for {Client}
   module Default
-
     # Default API endpoint
     API_ENDPOINT = 'http://localhost:8080/v1/projects/1a5'.freeze
 
@@ -27,11 +25,10 @@ module Rancher
     end
 
     class << self
-
       # Configuration options
       # @return [Hash]
       def options
-        Hash[Rancher::Configurable.keys.map{|key| [key, send(key)]}]
+        Hash[Rancher::Configurable.keys.map { |key| [key, send(key)] }]
       end
 
       # Default API endpoint from ENV or {API_ENDPOINT}
@@ -62,9 +59,9 @@ module Rancher
       # @return [Hash]
       def connection_options
         {
-          :headers => {
-            :accept => default_media_type,
-            :user_agent => user_agent
+          headers: {
+            accept: default_media_type,
+            user_agent: user_agent
           }
         }
       end

@@ -25,7 +25,6 @@ module Rancher
     attr_writer :api_endpoint
 
     class << self
-
       # List of configurable keys for {Rancher::Client}
       # @return [Array] of option keys
       def keys
@@ -54,7 +53,7 @@ module Rancher
       end
       self
     end
-    alias setup reset!
+    alias_method(setup, reset!)
 
     # Compares client options to a Hash of requested options
     #
@@ -65,13 +64,16 @@ module Rancher
     end
 
     def api_endpoint
-      File.join(@api_endpoint, "")
+      File.join(@api_endpoint, '')
     end
 
     private
 
     def options
-      Hash[Rancher::Configurable.keys.map{|key| [key, instance_variable_get(:"@#{key}")]}]
+      Hash[Rancher::Configurable.keys.map do |key|
+        [key, instance_variable_get(:"@#{key}")]
+        end
+      ]
     end
 
     def fetch_access_key_and_secret(overrides = {})

@@ -5,13 +5,12 @@ require 'rancher/connection'
 require 'rancher/classify'
 
 module Rancher
+  # The Main Client for talking with Rancher
   class Client
     include Rancher::Authentication
     include Rancher::Configurable
     include Rancher::Connection
     include Rancher::Classify
-
-    @types
 
     attr_reader :types
 
@@ -22,7 +21,10 @@ module Rancher
       # Use options passed in, but fall back to module defaults
       @types = {}
       Rancher::Configurable.keys.each do |key|
-        instance_variable_set(:"@#{key}", options[key] || Rancher.instance_variable_get(:"@#{key}"))
+        instance_variable_set(
+          :"@#{key}",
+          options[key] || Rancher.instance_variable_get(:"@#{key}")
+        )
       end
 
       load_schema
@@ -31,9 +33,9 @@ module Rancher
     def load_schema
       response = get 'schema'
 
-      response.each { |res|
+      response.each do |res|
         @types[res.get_id.to_sym] = Rancher::Type.new(res)
-      } if response.is_a?(Rancher::Collection)
+      end if response.is_a?(Rancher::Collection)
     end
 
     # Text representation of the client, masking tokens and passwords
@@ -65,17 +67,15 @@ module Rancher
       @secret_key = value
     end
 
-    def respond_to_missing?(method_name, include_private=false)
-      !!@types.has_key?(method_name)
+    def respond_to_missing?(method_name, _include_private = false)
+      (@types.key?(method_name))
     end
 
     def method_missing(method_name, *args, &block)
-      if respond_to?(method_name)
-        return @types[method_name]
-      end
+      return @types[method_name] if respond_to?(method_name)
 
       super
     end
-    
+
   end
 end

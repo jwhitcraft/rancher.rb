@@ -1,3 +1,4 @@
+# Set the Gem Version
 module Rancher
   # Current major release.
   # @return [Integer]

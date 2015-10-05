@@ -1,9 +1,8 @@
 require 'addressable/uri'
 
 module Rancher
+  # An Object type inside of Rancher
   class Type
-    @schema
-
     attr_reader :schema
 
     def initialize(schema)
@@ -16,10 +15,10 @@ module Rancher
 
     def query(filters = {}, sort = {}, pagination = {}, include = {})
       opts = {
-        :filters => filters,
-        :sort => sort,
-        :pagination => pagination,
-        :include => include
+        filters: filters,
+        sort: sort,
+        pagination: pagination,
+        include: include
       }
 
       link = self.class.list_href(url, opts)
@@ -63,20 +62,20 @@ module Rancher
       qs = []
       opts ||= {}
 
-      uri = Addressable::URI.parse(url) unless url.empty? or url.nil?
-      uri.query_values.each { |key, value|
+      uri = Addressable::URI.parse(url) unless url.empty? || url.nil?
+      uri.query_values.each do |key, value|
         qs.push("#{key}=#{value}")
-      } if uri.query_values
+      end if uri.query_values
 
       if opts[:filters]
-        opts[:filters].each { |field, value|
+        opts[:filters].each do |field, value|
           qs.push("#{field}=#{value}") unless value.is_a?(Array)
 
           if value.is_a?(Array)
-            qs.concat value.map { |val|
-              if val.is_a?(Hash) and (val.has_key?(:modifier) or val.has_key?(:value))
+            qs.concat value.map do |val|
+              if val.is_a?(Hash) && (val.has_key?(:modifier) || val.has_key?(:value))
                 name = "#{field}"
-                name += "_#{val[:modifier]}" if val.has_key?(:modifier) and val[:modifier] != '' and val[:modifier] != 'eq'
+                name += "_#{val[:modifier]}" if val.has_key?(:modifier) && val[:modifier] != '' && val[:modifier] != 'eq'
 
                 str = "#{name}="
 
@@ -86,26 +85,24 @@ module Rancher
               else
                 "#{field}=#{val}"
               end
-            }
-
+            end
           end
-        }
+        end
       end
 
-      if opts[:sort] && opts[:sort].has_key?(:name)
+      if opts[:sort] && opts[:sort].key?(:name)
         qs.push("sort=#{opts[:sort][:name]}")
-        qs.push('order=desc') if opts[:sort].has_key?(:order) and opts[:sort][:order] == 'desc'
+        qs.push('order=desc') if opts[:sort].key?(:order) && opts[:sort][:order] == 'desc'
       end
 
-      if opts[:pagination] && opts[:pagination].has_key?(:limit)
+      if opts[:pagination] && opts[:pagination].key?(:limit)
         qs.push("limit=#{opts[:pagination][:limit]}")
-        qs.push("marker=#{opts[:pagination][:marker]}") if opts[:pagination].has_key?(:marker)
+        qs.push("marker=#{opts[:pagination][:marker]}") if opts[:pagination].key?(:marker)
       end
 
-
-      qs.concat opts[:include].map { |inc|
+      qs.concat opts[:include].map do |inc|
         "include=#{inc}"
-      } if opts[:include] && opts[:include].is_a?(Array)
+      end if opts[:include] && opts[:include].is_a?(Array)
 
       uri.query = qs.join('&') if qs.size > 0
 

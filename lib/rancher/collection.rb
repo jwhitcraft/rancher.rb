@@ -1,11 +1,11 @@
 require 'rancher/resource'
 module Rancher
+  # A Collection of Resources
   class Collection < Resource
     include Enumerable
-    @data
 
     def initialize(data)
-      @data = data[:data] if data.has_key?(:data)
+      @data = data[:data] if data.key?(:data)
       super(data)
     end
 
@@ -25,9 +25,7 @@ module Rancher
     def each
       return @data.enum_for(:each) unless block_given?
 
-      @data.each { |d|
-        yield d
-      }
+      @data.each { |d| yield d }
     end
 
     private
@@ -40,6 +38,5 @@ module Rancher
 
       type
     end
-
   end
 end

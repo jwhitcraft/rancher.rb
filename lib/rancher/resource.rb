@@ -1,6 +1,6 @@
 module Rancher
+  # A Rancher Resource
   class Resource
-
     @meta = {}
     @links = []
     @actions = []
@@ -10,13 +10,12 @@ module Rancher
     def initialize(body = nil)
       @meta = {}
 
-      if body
-        body.each { |key, val|
-          @links = val if key == :links
-          @actions = val if key == :actions
-          continue if key == :body
-          @meta[key] = val unless key == :links or key == :actions
-        }
+      return unless body
+      body.each do |key, val|
+        @links = val if key == :links
+        @actions = val if key == :actions
+        continue if key == :body
+        @meta[key] = val unless key == :links || key == :actions
       end
     end
 
@@ -33,11 +32,11 @@ module Rancher
     end
 
     def action?(name)
-      !!@actions[name.to_sym]
+      (@actions[name.to_sym])
     end
 
     def in_meta?(name)
-      !!@meta[name.to_sym]
+      (@meta[name.to_sym])
     end
 
     def action(name, *args)
@@ -48,19 +47,19 @@ module Rancher
       end
     end
 
-    def method_missing(method_name, *args, &block)
+    def method_missing(method_name, *args, &_block)
       str_method_name = method_name.to_s
       if str_method_name.start_with?('fetch')
         name = str_method_name[6..-1]
         do_fetch(name, *args)
       elsif str_method_name.start_with?('get')
         name = str_method_name[4..-1]
-        if @meta.has_key?(name.to_sym)
+        if @meta.key?(name.to_sym)
           ## Todo Handle TS return in seconds
           @meta[name.to_sym]
         else
           field = schema_field(name)
-          raise("Attempted to access unknown property '#{name}'") if field.nil?
+          fail("Attempted to access unknown property '#{name}'") if field.nil?
           nil
         end
       elsif str_method_name.start_with?('set')
@@ -77,6 +76,7 @@ module Rancher
     end
 
     private
+
     def do_fetch(name, *args)
       opts = args[0] || {}
       link = Rancher::Type.list_href(get_link(name), opts)
