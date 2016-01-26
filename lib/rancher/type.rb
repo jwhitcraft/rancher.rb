@@ -29,7 +29,7 @@ module Rancher
     def create(attrs)
       attrs = attrs.meta if attrs.is_a?(Rancher::Resource)
 
-      Rancher.post url attrs
+      Rancher.post(url, attrs)
     end
 
     def remove!(id_or_obj)
