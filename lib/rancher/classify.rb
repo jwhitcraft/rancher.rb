@@ -41,7 +41,7 @@ module Rancher
         elsif is_object?(element) && element[:type] && data.rels[key]
           data[key] = classify_object(element, depth + 1)
         elsif element.is_a?(Sawyer::Resource)
-          data[key] = element.attrs
+          data[key] = element.to_attrs
         end
       end
 
