@@ -73,7 +73,7 @@ module Rancher
 
           next unless value.is_a?(Array)
 
-          qs.concat value.map do |val|
+          qs.concat value.map { |val|
             if val.is_a?(Hash) && (val.key?(:modifier) || val.key?(:value))
               name = "#{field}"
               name += "_#{val[:modifier]}" if val.key?(:modifier) && val[:modifier] != '' && val[:modifier] != 'eq'
@@ -86,7 +86,7 @@ module Rancher
             else
               "#{field}=#{val}"
             end
-          end
+          }
         end
       end
 
